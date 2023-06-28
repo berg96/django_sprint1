@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 posts = [
@@ -50,9 +51,14 @@ def index(request):
     return render(request, template, context)
 
 
-def post_detail(request, id):
+def post_detail(request, post_id):
     template = 'blog/detail.html'
-    context = {'post': posts[id]}
+    context = None
+    for post in posts:
+        if post['id'] == post_id:
+            context = {'post': post}
+    if context is None:
+        raise Http404(f'Invalid value of the post_id = {post_id}')
     return render(request, template, context)
 
 
