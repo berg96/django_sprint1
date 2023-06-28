@@ -44,6 +44,8 @@ posts = [
     },
 ]
 
+post_data = {post['id']: post for post in posts}
+
 
 def index(request):
     template = 'blog/index.html'
@@ -54,9 +56,8 @@ def index(request):
 def post_detail(request, post_id):
     template = 'blog/detail.html'
     context = None
-    for post in posts:
-        if post['id'] == post_id:
-            context = {'post': post}
+    if post_id in post_data:
+        context = {'post': post_data[post_id]}
     if context is None:
         raise Http404(f'Invalid value of the post_id = {post_id}')
     return render(request, template, context)
